@@ -5,8 +5,8 @@ using namespace  N;
 
 int main() {
     cycle _obj;
-    _obj.welcome();
-
+//    _obj.welcome();
+    _obj.loadingRecordTicket();
 
 
     return 0;
