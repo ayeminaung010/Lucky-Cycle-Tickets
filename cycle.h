@@ -39,22 +39,36 @@ namespace  N {
         int luckyNumberIndex = 0;
 
 
-
         //function declaration
         void welcome();
-        int mainManu();
+        void mainManu();
         void login();
         void Register();
         void loadingNumber(); // loading lucky number
         void userDataLoading(); //loading userData for admin
         void showUserData(); // show data for admin
         int userExist(string uName); //check user exist or not
-        int luckyMainProject();
+        int luckyMainProject();  //to buy lucky tickets
         void toRecordUserData(); //after program close ,store user data at file
-        void luckyMOption(); // option for choose Lucky Number funciton
+        void luckyMOption(); // option for choose Lucky Number func
+        void userOption(); //user option
+        void toReadHistory(); //to show user buy data
+        void changeUserName(); // change username
+        void changeUserPass(); //change user pass
+        void fillUserAmount(); // fill money user
+        int toCheckLuckyNumber(string number); // already buy or not
+
+        //for admin
+        string admin_username;
+        string admin_password;
+        string _arr_admin_username[10];
+        string _arr_admin_password[10];
+
+        int _adminIndex = 0;
+        void adminView();
         void showAlltransition(); //show all record transition
         void loadingRecordTicket(); // loading already buy  tickets
-    private:
+
     };
 
 }

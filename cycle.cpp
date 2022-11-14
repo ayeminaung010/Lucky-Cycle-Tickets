@@ -13,11 +13,11 @@ void cycle::welcome() {
     cout<<"Welcome from our cycle lucky project"<<endl;
     userDataLoading();
     showUserData();
-    mainManu();
 
+    mainManu();
 }
 
-int cycle::mainManu() {
+void cycle::mainManu() {
     string  mainMenuOption;
     cout<<" \n This is main menu"<<endl;
     cout<<" Press 1 to Register \n Press 2 to Login \n Press 3 to Quit"<<endl;
@@ -71,21 +71,14 @@ void cycle::loadingRecordTicket() {
                         count++;
                     }else if(count == 1){
                         luckyNumber[luckyNumberIndex] = data;
+                        cout<<"Already buy this number:"<<luckyNumber[luckyNumberIndex]<<endl;
                         luckyNumberIndex++;
-                        cout<<"Already buy "<<luckyNumber[luckyNumberIndex]<<endl;
                         data = "";
                         count++;
                     }else if(count == 2){
                         data = "";
-                        count++;
-                    }else if (count == 3){
-                        data = "";
-                        count++;
-                    }else if(count == 4 ){
-                        data = "";
                         count = 0;
                     }
-
 
                 }else{
                     string st(1,ch);
@@ -103,47 +96,65 @@ void cycle::loadingRecordTicket() {
 
 }
 int cycle::luckyMainProject() {
-
     cout<<"This is to choose for lucky number ..Good Luck!"<<endl;
     loadingNumber();
     cout<<"Choose 3 digits Number You Want :"<<endl;
     cin>>choose_numuber;
-    int number = 0;
-    number = stoi(choose_numuber);
-    if(number >= 100 &&  number < 1000){
-        cout<<"Loading.....Please wait..!!"<<endl;
-        cout<<"Buy SuccessFully... \nGood choice..Good Luck Your Number :)"<<endl;
-
-        string  recordFile = "recordTicketsBuy.txt";
-        string  usernameFile = arrUsername[current_index]+".txt";
-        //to write file
-        ofstream outfile; // open all record bought data file
-        outfile.open(recordFile,ios::app);
-
-        ofstream userFile; // open userfile
-        userFile.open(usernameFile,ios::app);
-        if(outfile.is_open()){
-            string toRecord = to_string(current_index + 1)+" "+ to_string(number) +" bought-by "+arrUsername[current_index]+" \n";
-            outfile<<toRecord;
-
-            string userTxtRecord = to_string(number) + " bought by you:"+arrUsername[current_index]+" \n";
-            userFile<<userTxtRecord;
-
-            userFile.close();// close userfile
-
-            outfile.close(); //close all data file
-
-            luckyMOption();
-        }else{
-            cout<<"Enable to record data !"<<endl;
-            cout<<"Error 444"<<endl;
-            exit(444);
-        }
-
+    int status = toCheckLuckyNumber(choose_numuber);
+    if(status == 1){
+        cout<<"Already bought this number :"<<choose_numuber<<endl;
+        cout<<"__________________________________"<<endl;
+        luckyMainProject();
     }else{
-        cout<<"Invalid input..PLease Enter 3 digits...!"<<endl;
-        luckyMOption();
-    }
+        int number = 0;
+        number = stoi(choose_numuber);
+        if(number >= 100 &&  number < 1000){
+            cout<<"Loading.....Please wait..!!"<<endl;
+            cout<<"Checking your Balance..."<<endl;
+            int balance = stoi(arrAmount[current_index]);
+            if( balance >= 2500){
+                int newBalance =  balance - 2500;
+                balance = newBalance;
+                arrAmount[current_index] = to_string(balance);
+                toRecordUserData();
+
+                string  recordFile = "recordTicketsBuy.txt"; //for admin file
+                string  usernameFile = arrUsername[current_index]+".txt"; //user only file
+                //to write file
+                ofstream outfile; // open all record bought data file
+                outfile.open(recordFile,ios::app);
+
+                ofstream userFile; // open userfile
+                userFile.open(usernameFile,ios::app);
+                if(outfile.is_open()){
+                    string toRecord = to_string(current_index + 1)+" "+ to_string(number) +" bought-by "+arrUsername[current_index]+"\n";
+                    outfile<<toRecord; //for admin file
+
+                    string userTxtRecord = to_string(number) + " bought by you:"+arrUsername[current_index]+" \n";
+                    userFile<<userTxtRecord; //user only file
+
+                    userFile.close();// close userfile
+
+                    outfile.close(); //close all data file
+                    cout<<"Buy SuccessFully... \nGood choice..Good Luck Your Number :)"<<endl;
+
+                    luckyMOption();
+                }else{
+                    cout<<"Enable to record data !"<<endl;
+                    cout<<"Error 444"<<endl;
+                    exit(444);
+                }
+            }else{
+                cout<<"Insufficient Balance...\nFill your Balance to buy again!!"<<endl;
+                cout<<"__________________________________"<<endl;
+                userOption();
+            }
+        }else{
+            cout<<"Invalid input..PLease Enter 3 digits...!"<<endl;
+            luckyMOption();
+        }
+    }//end checking
+
 
 }
 
@@ -153,6 +164,7 @@ void cycle::luckyMOption(){
     if(luckyM_option == "1"){
         luckyMainProject();
     }else if(luckyM_option == "2"){
+        cout<<"BYE BYE..."<<endl;
         exit(1);
     }else{
         mainManu();
@@ -160,7 +172,7 @@ void cycle::luckyMOption(){
 }
 
 void cycle::Register() {
-    string r_option =0;
+    string r_option;
     cout<<"This is Register Page"<<endl;
     cout<<"Enter username to Register."<<endl;
     cin>>r_username;
@@ -176,8 +188,6 @@ void cycle::Register() {
             cout<<"Invalid Input.. !"<<endl;
             mainManu();
         }
-
-
     }else{
         cout<<"Enter your password for "<<r_username<<endl;
         cin>>r_password;
@@ -207,10 +217,6 @@ void cycle::Register() {
 
 void cycle::toRecordUserData(){
     string  userDatafile = "user.txt";
-//    //to clean file
-//    std::ofstream ofs;
-//    ofs.open(userDatafile, std::ofstream::out | std::ofstream::trunc);
-//    ofs.close();
 
     //to write file
     ofstream outfile;
@@ -242,8 +248,8 @@ void cycle::login() {
         if (lpassword == arrPassword[status]){
             cout<<"Login success..."<<endl;
             current_index = status; // to know current login user
-
-            luckyMainProject(); // go to buy lucky number
+            userOption();
+           // here something// go to buy lucky number
         }else{
             cout<<"login failed! Wrong password!.."<<endl;
             login();
@@ -308,7 +314,6 @@ void cycle::userDataLoading() {
                     }else if(count == 2){
                         arrPassword[passwordIndex] = data;
                         passwordIndex++;
-
                         data = "";
                         count++;
                     }else if (count == 3){
@@ -322,7 +327,6 @@ void cycle::userDataLoading() {
                     string st(1,ch);
                     data = data + st;
                 }
-
             }
         }//end while
 
@@ -337,5 +341,115 @@ void cycle::showUserData() {
     for (int i = 0; i < idIndex ; i++) {
         cout<<"id : "<<arrId[i]<<" -"<<"username : "<<arrUsername[i]<<" -"<<"password : "<<arrPassword[i]<<" -"<<"amount : "<<arrAmount[i]<<endl;
     }
+}
+
+void cycle::userOption() {
+    string u_option;
+    cout<<"Press 1 to buy tickets\nPress 2 to Change Username\nPress 3 to Change Password\nPress 4 to see History\nPress 5 to Fill money\nPress 6 to Log Out\nPress 7 to Quit"<<endl;
+    cin>>u_option;
+
+    if(u_option == "1"){
+        luckyMainProject();
+    }else if (u_option == "2"){
+        changeUserName();
+    }else if (u_option == "3"){
+        changeUserPass();
+    }else if (u_option == "4"){
+        toReadHistory();
+        userOption();
+    }else if (u_option == "5"){
+        fillUserAmount();
+    }else if (u_option == "6"){
+        mainManu();
+    }else if (u_option == "7"){
+        cout<<"BYE BYE GOOD LUCK"<<endl;
+        exit(1);
+    }else{
+        cout<<"Invalid Input!"<<endl;
+        userOption();
+    }
+
+}
+
+void cycle::toReadHistory() {
+    string filename = arrUsername[current_index] + ".txt";
+    string historyData;
+    ifstream History(filename);
+    if(History.is_open()){
+        while (getline(History,historyData)){
+            cout<<historyData<<endl;
+        }
+        cout<<"Thank You For Your Support"<<endl;
+        cout<<"__________________________________"<<endl;
+        History.close();
+    }else{
+        cout<<"cannot open file"<<endl;
+    }
+}
+
+void cycle::changeUserName() {
+    string n_username;
+    cout<<"Enter new Username for :"<<arrUsername[current_index]<<endl;
+    cin>>n_username;
+    int status = userExist(n_username);
+    if(status != -1){
+        cout<<"Username Already Exists.. Try Again!!  "<<endl;
+        changeUserName();
+    }else{
+        arrUsername[current_index] = n_username;
+        cout<<"Your new username is -"<<arrUsername[current_index];
+        toRecordUserData();
+        //something to do
+
+    }
+}
+
+void cycle::changeUserPass() {
+    string  c_password;
+    string n_password;
+    string cp_option;
+    cout<<"Enter your current Password "<<endl;
+    cin>>c_password;
+    if(c_password == arrPassword[current_index]){
+        cout<<"Enter new Password for :"<<arrUsername[current_index]<<endl;
+        cin>>n_password;
+        arrPassword[current_index] = n_password;
+        toRecordUserData();
+        userOption();
+    }else{
+        cout<<"Wrong Password!!"<<endl;
+        cout<<"Press 1 to go Option\nPress any number to Change Password again"<<endl;
+        cin>>cp_option;
+        if(cp_option == "1"){
+            userOption();
+        }else{
+            changeUserPass();
+        }
+    }
+}
+
+void  cycle::fillUserAmount() {
+    string n_amount;
+    cout<<"Enter your amount:"<<endl;
+    cin>>n_amount;
+    arrAmount[current_index] = n_amount;
+    toRecordUserData();
+    cout<<"SuccessFully Added your Balance.."<<endl;
+    cout<<"__________________________________"<<endl;
+    userOption();
+}
+
+int cycle::toCheckLuckyNumber(string number) {
+    for (int j = 0; j < luckyNumberIndex ; j++) {
+        if(luckyNumber[j] == number){
+            return 1; //found number
+        }
+    }
+    return -1; //not found
+}
+
+void cycle::adminView() {
+    cout<<"Welcome from Admin Panel"<<endl;
+
 
 }

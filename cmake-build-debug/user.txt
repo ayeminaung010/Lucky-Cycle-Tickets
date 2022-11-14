@@ -8,4 +8,5 @@
 8 ninin 444 5000 
 9 ayeaye 555 5000 
 10 popo 222 6000 
-11 aungaung aungaung 5000 
+11 kokoaung kokoaung 0 
+12 ayemin 111 9000 
