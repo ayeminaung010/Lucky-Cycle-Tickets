@@ -15,6 +15,7 @@ void cycle::welcome() {
     showUserData();
 
     mainManu();
+//    remove_user();
 }
 
 void cycle::mainManu() {
@@ -36,7 +37,7 @@ void cycle::mainManu() {
     }
 }
 
-void cycle::showAlltransition() {
+void cycle::showAllRecordTransition() {
     cout<<"loading recorded data is running.."<<endl;
 
     string  recordFile = "recordTicketsBuy.txt";
@@ -124,7 +125,7 @@ int cycle::luckyMainProject() {
                 ofstream outfile; // open all record bought data file
                 outfile.open(recordFile,ios::app);
 
-                ofstream userFile; // open userfile
+                ofstream userFile; // open user file
                 userFile.open(usernameFile,ios::app);
                 if(outfile.is_open()){
                     string toRecord = to_string(current_index + 1)+" "+ to_string(number) +" bought-by "+arrUsername[current_index]+"\n";
@@ -180,6 +181,7 @@ void cycle::Register() {
     if(status != -1){
         cout<<"Username Already Exists.. Try Again!!  "<<endl;
         cout<<"Press 1 to login \nPress 2 to continue Register"<<endl;
+        cin>>r_option;
         if(r_option == "1"){
             login();
         }else if(r_option == "2"){
@@ -237,10 +239,24 @@ void cycle::toRecordUserData(){
 }
 
 void cycle::login() {
-
+    string admin_pass;
     cout<<"This is Login Page"<<endl;
     cout<<"Enter your username to Login"<<endl;
     cin>>lusername;
+    int adminStatus = toCheckAdmin(lusername);
+
+    if(adminStatus != -1){
+            cout<<"Found!  You are Admin....Enter your password"<<endl;
+            cin>>admin_pass;
+            if(_arr_admin_password[adminStatus] == admin_pass){
+                adminView();
+            } else{
+                cout<<"Wrong Password!"<<endl;
+                mainManu();
+            }
+    }
+
+
     int status = userExist(lusername);
     if(status != -1){
         cout<<"UserName Found! .. \nEnter your password for "<<lusername<<endl;
@@ -283,6 +299,9 @@ int cycle::userExist(string uName) {
     for (int j = 0; j < userNameIndex ; j++) {
         if(arrUsername[j] == uName){
             return j; //found uName
+        }
+        if(_arr_admin_username[j] == uName){
+            return j;
         }
     }
     return -1; //not found
@@ -448,8 +467,198 @@ int cycle::toCheckLuckyNumber(string number) {
     return -1; //not found
 }
 
+int cycle::toCheckAdmin(string lname) {
+    for (int j = 0; j < _adminIndex ; j++) {
+        if(_arr_admin_username[j] == lname){
+            return j; //found uName
+        }
+    }
+    return -1; //not found
+}
+
 void cycle::adminView() {
+    string admin_option;
     cout<<"Welcome from Admin Panel"<<endl;
+    cout<<"Press 1 to see User Data\nPress 2 to see Tickets buy History\nPress 3 to manage User\nPress 4 to see Already buy number Only..\nPress 5 to Log out\nPress 6 to Quit"<<endl;
+    cin>>admin_option;
+    if(admin_option == "1"){
+        showUserData();
+        adminView();
+    }else if(admin_option== "2"){
+        showAllRecordTransition();
+        adminView();
+    }else if(admin_option == "3"){
+        manageUser();
+    }else if(admin_option == "4"){
+        loadingRecordTicket();
+        adminView();
+    }else if(admin_option == "5"){
+        mainManu();
+    }else if(admin_option == "6"){
+        cout<<"Bye Bye Admin..."<<endl;
+        exit(1);
+    }else{
+        cout<<"Invalid input!!"<<endl;
+        adminView();
+    }
+}
+
+void cycle::manageUser() {
+    string  m_option;
+    cout<<"Press 1 to remove user account\nPress 2 to Ban User \nPress 3 to change User password\nPress 4 to go back\nPress 5 to Quit"<<endl;
+    cin>>m_option;
+    if(m_option == "1"){
+        remove_user();
+    }else if(m_option == "2"){
+        ban_user();
+    }else if(m_option== "3"){
+        _change_userPass();
+    }else if(m_option == "4"){
+        adminView();
+    }else if(m_option == "5"){
+        cout<<"Bye Bye Admin..."<<endl;
+        exit(1);
+    }else{
+        cout<<"Invalid input!!"<<endl;
+        manageUser();
+    }
+}
+
+int cycle::remove_user() {
+    string rm_username;
+    string rm_option;
+
+    cout<<"Enter username to remove"<<endl;
+    cin>>rm_username;
+    int status = userExist(rm_username);
+    if(status != -1){
+            cout<<"Found username...!! Are you sure to remove this user :"<<arrUsername[status]<<endl;
+            cout<<"Press 1 to say YES\nPress 2 to say NO"<<endl;
+            cin>>rm_option;
+
+            if(rm_option == "1"){
+                    for (int i = 0; i < 100; ++i) {
+                        arrUsername[i] = arrUsername[i+1];
+                        arrPassword[i] = arrPassword[i+1];
+                        arrAmount[i] = arrAmount[i+1];
+                        arrId[i] = arrId[i+1];
+                    }
+                    userNameIndex--;
+                    passwordIndex--;
+                    amountIndex--;
+                    idIndex--;
+                    cout<<"Successfully removed..."<<endl;
+                    toRecordUserData();
+                    optionForRemove();
+            }else if(rm_option == "2"){
+                optionForRemove();
+            }else{
+                cout<<"Invalid Input"<<endl;
+                remove_user();
+            }
+    }else{
+        cout<<"Username Not Found"<<endl;
+        remove_user(); //something
+    }
+}
+void cycle::optionForRemove(){
+    string rm_option2;
+    cout<<"Press 1 to go back\nPress 2 to remove  username again"<<endl;
+    cin>>rm_option2;
+    if(rm_option2 == "1"){
+        adminView();
+    }else if(rm_option2 =="2"){
+        remove_user();
+    }else{
+        cout<<"Invalid Input"<<endl;
+        optionForRemove();
+    }
+}
+
+int cycle::ban_user(){
+    string  b_username;
+    string b_option;
+    cout<<"Enter username to Ban from our program ..."<<endl;
+    cin>>b_username;
+    int status = userExist(b_username);
+
+    if(status != 1){
+        cout<<"Found username...!! Are you sure to remove this user :"<<arrUsername[status]<<endl;
+        cout<<"Press 1 to say YES\nPress 2 to say NO"<<endl;
+        cin>>b_option;
+
+        if(b_option == "1"){
+            toRecordBanUser(b_username);
+            cout<<"Successfully Banned.. !"<<endl;
+            optionForBan();
+        }else if(b_option == "2"){
+            optionForBan();
+        }else{
+            cout<<"Invalid Input"<<endl;
+            ban_user();
+        }
+    } else{
+        cout<<"User not found "<<endl;
+        ban_user();
+    }
+}
+
+void cycle::toRecordBanUser( string bname) {
+    string  ban_file = "BanUser.txt";
+
+    //to write file
+    ofstream outfile;
+    outfile.open(ban_file,ios::out);
+    if(outfile.is_open()){
+        string toRecord = bname+"\n";
+        outfile<<toRecord;
+
+        outfile.close();
+    }else{
+        cout<<"Enable to record data !"<<endl;
+        cout<<"Error 444"<<endl;
+        exit(444);
+    }
+
+}
+void cycle::optionForBan(){
+    string b_option2;
+    cout<<"Press 1 to go back\nPress 2 to ban  username again"<<endl;
+    cin>>b_option2;
+    if(b_option2 == "1"){
+        adminView();
+    }else if(b_option2 =="2"){
+        ban_user();
+    }else{
+        cout<<"Invalid Input"<<endl;
+        optionForRemove();
+    }
+}
 
 
+int cycle::_change_userPass(){
+    string ch_username;
+    string n_pass;
+    cout<<"Enter username to change password"<<endl;
+    cin>>ch_username;
+    int status = userExist(ch_username);
+    if(status != -1){
+        cout<<"Found username :"<<endl;
+        cout<<"Enter new password for this user :"<<arrUsername[status]<<endl;
+        cin>>n_pass;
+        while (true){
+            if(n_pass !=  arrPassword[status]){
+                arrPassword[status] = n_pass;
+                toRecordUserData();
+                cout<<"Password changed SuccessFully .... "<<endl;
+                manageUser();
+            }else{
+                cout<<"Password must not be same with current password..!!"<<endl;
+                break;
+            }
+        }
+    }else{
+        cout<<"User not found "<<endl;
+        _change_userPass();
+    }
 }

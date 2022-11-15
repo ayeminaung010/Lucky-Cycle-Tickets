@@ -45,8 +45,7 @@ namespace  N {
         void login();
         void Register();
         void loadingNumber(); // loading lucky number
-        void userDataLoading(); //loading userData for admin
-        void showUserData(); // show data for admin
+
         int userExist(string uName); //check user exist or not
         int luckyMainProject();  //to buy lucky tickets
         void toRecordUserData(); //after program close ,store user data at file
@@ -57,18 +56,27 @@ namespace  N {
         void changeUserPass(); //change user pass
         void fillUserAmount(); // fill money user
         int toCheckLuckyNumber(string number); // already buy or not
+        void loadingRecordTicket(); // loading already buy  tickets
 
         //for admin
         string admin_username;
         string admin_password;
-        string _arr_admin_username[10];
-        string _arr_admin_password[10];
+        string _arr_admin_username[3] = {"admin1@gmail.com","admin2@gmail.com","admin3@gmail.com"};
+        string _arr_admin_password[3] = {"admin1","admin2","admin3"};
 
-        int _adminIndex = 0;
+        int _adminIndex = 3;
+        void userDataLoading(); //loading userData for admin
         void adminView();
-        void showAlltransition(); //show all record transition
-        void loadingRecordTicket(); // loading already buy  tickets
-
+        void showAllRecordTransition(); //show record all transition
+        void showUserData(); // show data for admin
+        int toCheckAdmin(string lname); // login check  admin or not
+        void manageUser(); //manage user
+        int remove_user();
+        int ban_user();
+        int _change_userPass();
+        void optionForRemove();
+        void  optionForBan();
+        void toRecordBanUser( string bname);
     };
 
 }
