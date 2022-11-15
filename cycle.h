@@ -38,7 +38,8 @@ namespace  N {
         string luckyNumber[1000];
         int luckyNumberIndex = 0;
 
-
+        string changeUname[100];
+        int changeUnameIndex =0;
         //function declaration
         void welcome();
         void mainManu();
@@ -57,13 +58,15 @@ namespace  N {
         void fillUserAmount(); // fill money user
         int toCheckLuckyNumber(string number); // already buy or not
         void loadingRecordTicket(); // loading already buy  tickets
-
+        void showBalance();
         //for admin
         string admin_username;
         string admin_password;
-        string _arr_admin_username[3] = {"admin1@gmail.com","admin2@gmail.com","admin3@gmail.com"};
-        string _arr_admin_password[3] = {"admin1","admin2","admin3"};
+        string _arr_admin_username[10] = {"admin"};
+        string _arr_admin_password[10] = {"admin123"};
+        string  _banUser[100];
 
+        int _banIndex = 0;
         int _adminIndex = 3;
         void userDataLoading(); //loading userData for admin
         void adminView();
@@ -73,10 +76,13 @@ namespace  N {
         void manageUser(); //manage user
         int remove_user();
         int ban_user();
-        int _change_userPass();
+        int _change_userPass(); //change user pass for admin /what if user contact to admin,user not remember pass
         void optionForRemove();
         void  optionForBan();
-        void toRecordBanUser( string bname);
+        void toRecordBanUser(); // record ban user
+        int toCheckBanUser(string ban_user); //check ban use or not
+        void loadingBanUser(); //loading from file/ ban users
+        void showBanUserlist();//to show ban user for admin
     };
 
 }

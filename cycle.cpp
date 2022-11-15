@@ -13,9 +13,7 @@ void cycle::welcome() {
     cout<<"Welcome from our cycle lucky project"<<endl;
     userDataLoading();
     showUserData();
-
     mainManu();
-//    remove_user();
 }
 
 void cycle::mainManu() {
@@ -50,7 +48,8 @@ void cycle::showAllRecordTransition() {
         }
         datafile.close();
     }else{
-        cout<<"cannot open file"<<endl;
+        cout<<"Don't have record!\nCannot open file"<<endl;
+        adminView();
     }
 }
 
@@ -64,7 +63,6 @@ void cycle::loadingRecordTicket() {
     ifstream datafile(recordFile);
     if(datafile.is_open()){
         while (getline(datafile,dataLine)){
-//            dataLine = dataLine+" ";
             for(auto &ch :dataLine){
                 if(ch == ' '){
                     if(count == 0){
@@ -244,6 +242,7 @@ void cycle::login() {
     cout<<"Enter your username to Login"<<endl;
     cin>>lusername;
     int adminStatus = toCheckAdmin(lusername);
+    int ban_status = toCheckBanUser(lusername);
 
     if(adminStatus != -1){
             cout<<"Found!  You are Admin....Enter your password"<<endl;
@@ -255,34 +254,37 @@ void cycle::login() {
                 mainManu();
             }
     }
-
-
-    int status = userExist(lusername);
-    if(status != -1){
-        cout<<"UserName Found! .. \nEnter your password for "<<lusername<<endl;
-        cin>>lpassword;
-        if (lpassword == arrPassword[status]){
-            cout<<"Login success..."<<endl;
-            current_index = status; // to know current login user
-            userOption();
-           // here something// go to buy lucky number
+    if(ban_status == -1){
+        int status = userExist(lusername);
+        if(status != -1){
+            cout<<"UserName Found! .. \nEnter your password for "<<lusername<<endl;
+            cin>>lpassword;
+            if (lpassword == arrPassword[status]){
+                cout<<"Login success..."<<endl;
+                current_index = status; // to know current login user
+                userOption();
+                // here something// go to buy lucky number
+            }else{
+                cout<<"login failed! Wrong password!.."<<endl;
+                login();
+            }
         }else{
-            cout<<"login failed! Wrong password!.."<<endl;
-            login();
+            cout<<"Username not found!"<<endl;
+            mainManu();
         }
     }else{
-        cout<<"Username not found!"<<endl;
+        cout<<"********This account is Banned By admin*******\nContact Our Email Address ->> cyclepj@gmail.com"<<endl;
         login();
     }
-
 }
 
 void cycle::loadingNumber(){
+    string luckynumber = "luckynumber.txt";
+
     cout<<"loading process is running.."<<endl;
 
-    string luckynumber = "luckynumber.txt";
     string numberData;
-
+    //read file
     ifstream numberfile(luckynumber);
     if(numberfile.is_open()){
         while (getline(numberfile,numberData)){
@@ -292,7 +294,6 @@ void cycle::loadingNumber(){
     }else{
         cout<<"cannot open file"<<endl;
     }
-
 }
 
 int cycle::userExist(string uName) {
@@ -341,7 +342,6 @@ void cycle::userDataLoading() {
                         data = "";
                         count = 0;
                     }
-
                 }else{
                     string st(1,ch);
                     data = data + st;
@@ -353,7 +353,6 @@ void cycle::userDataLoading() {
     }else{
         cout<<"cannot open file"<<endl;
     }
-    
 }
 
 void cycle::showUserData() {
@@ -364,7 +363,7 @@ void cycle::showUserData() {
 
 void cycle::userOption() {
     string u_option;
-    cout<<"Press 1 to buy tickets\nPress 2 to Change Username\nPress 3 to Change Password\nPress 4 to see History\nPress 5 to Fill money\nPress 6 to Log Out\nPress 7 to Quit"<<endl;
+    cout<<"Press 1 to buy tickets\nPress 2 to Change Username\nPress 3 to Change Password\nPress 4 to see History\nPress 5 to Fill money\nPress 6 to see Balance\nPress 7 to Log Out\nPress 8 to Quit"<<endl;
     cin>>u_option;
 
     if(u_option == "1"){
@@ -379,8 +378,10 @@ void cycle::userOption() {
     }else if (u_option == "5"){
         fillUserAmount();
     }else if (u_option == "6"){
-        mainManu();
+        showBalance();
     }else if (u_option == "7"){
+        mainManu();
+    }else if (u_option == "8"){
         cout<<"BYE BYE GOOD LUCK"<<endl;
         exit(1);
     }else{
@@ -388,6 +389,15 @@ void cycle::userOption() {
         userOption();
     }
 
+}
+void cycle::showBalance() {
+    if(stoi(arrAmount[current_index]) <= 2000){
+        cout<<"Your Balance is Low(fill money to buy more ):"<<arrAmount[current_index]<<endl;
+        userOption();
+    }else{
+        cout<<"Your Balance is :"<<arrAmount[current_index]<<endl;
+        userOption();
+    }
 }
 
 void cycle::toReadHistory() {
@@ -402,7 +412,8 @@ void cycle::toReadHistory() {
         cout<<"__________________________________"<<endl;
         History.close();
     }else{
-        cout<<"cannot open file"<<endl;
+        cout<<"No data found!!\nCannot open file!"<<endl;
+        userOption();
     }
 }
 
@@ -415,21 +426,20 @@ void cycle::changeUserName() {
         cout<<"Username Already Exists.. Try Again!!  "<<endl;
         changeUserName();
     }else{
-        arrUsername[current_index] = n_username;
-        cout<<"Your new username is -"<<arrUsername[current_index];
+        arrUsername[current_index] = n_username; //changes
+        cout<<"Your new username is -"<<arrUsername[current_index]<<endl;
         toRecordUserData();
-        //something to do
-
+        userOption();
     }
 }
 
 void cycle::changeUserPass() {
-    string  c_password;
+    string  ch_password;
     string n_password;
     string cp_option;
     cout<<"Enter your current Password "<<endl;
-    cin>>c_password;
-    if(c_password == arrPassword[current_index]){
+    cin>>ch_password;
+    if(ch_password == arrPassword[current_index]){
         cout<<"Enter new Password for :"<<arrUsername[current_index]<<endl;
         cin>>n_password;
         arrPassword[current_index] = n_password;
@@ -451,7 +461,7 @@ void  cycle::fillUserAmount() {
     string n_amount;
     cout<<"Enter your amount:"<<endl;
     cin>>n_amount;
-    arrAmount[current_index] = n_amount;
+    arrAmount[current_index] = stoi(arrAmount[current_index])+ stoi(n_amount);
     toRecordUserData();
     cout<<"SuccessFully Added your Balance.."<<endl;
     cout<<"__________________________________"<<endl;
@@ -505,7 +515,7 @@ void cycle::adminView() {
 
 void cycle::manageUser() {
     string  m_option;
-    cout<<"Press 1 to remove user account\nPress 2 to Ban User \nPress 3 to change User password\nPress 4 to go back\nPress 5 to Quit"<<endl;
+    cout<<"Press 1 to remove user account\nPress 2 to Ban User \nPress 3 to change User password\nPress 4 to see Banned user lists\nPress 5 to go back\nPress 6 to Quit"<<endl;
     cin>>m_option;
     if(m_option == "1"){
         remove_user();
@@ -514,8 +524,10 @@ void cycle::manageUser() {
     }else if(m_option== "3"){
         _change_userPass();
     }else if(m_option == "4"){
-        adminView();
+        showBanUserlist();
     }else if(m_option == "5"){
+        adminView();
+    }else if(m_option == "6"){
         cout<<"Bye Bye Admin..."<<endl;
         exit(1);
     }else{
@@ -583,12 +595,14 @@ int cycle::ban_user(){
     int status = userExist(b_username);
 
     if(status != 1){
-        cout<<"Found username...!! Are you sure to remove this user :"<<arrUsername[status]<<endl;
+        cout<<"Found username...!! Are you sure to ban this user :"<<arrUsername[status]<<endl;
         cout<<"Press 1 to say YES\nPress 2 to say NO"<<endl;
         cin>>b_option;
 
         if(b_option == "1"){
-            toRecordBanUser(b_username);
+            _banUser[_banIndex] = b_username;
+            _banIndex++;
+            toRecordBanUser();
             cout<<"Successfully Banned.. !"<<endl;
             optionForBan();
         }else if(b_option == "2"){
@@ -603,16 +617,17 @@ int cycle::ban_user(){
     }
 }
 
-void cycle::toRecordBanUser( string bname) {
+void cycle::toRecordBanUser() {
     string  ban_file = "BanUser.txt";
 
     //to write file
     ofstream outfile;
     outfile.open(ban_file,ios::out);
     if(outfile.is_open()){
-        string toRecord = bname+"\n";
-        outfile<<toRecord;
-
+        for (int i = 0; i < _banIndex ; ++i) {
+            string toRecord = _banUser[i]+"\n";
+            outfile<<toRecord;
+        }
         outfile.close();
     }else{
         cout<<"Enable to record data !"<<endl;
@@ -660,5 +675,38 @@ int cycle::_change_userPass(){
     }else{
         cout<<"User not found "<<endl;
         _change_userPass();
+    }
+}
+
+int cycle::toCheckBanUser(string ban_user) {
+    for (int i = 0; i < _banIndex ; ++i) {
+        if(_banUser[i] == ban_user){
+            return i; //found
+        }
+    }
+    return -1; //not found
+}
+
+void cycle::loadingBanUser() {
+    string  ban_file = "BanUser.txt";
+
+    string historyData;
+    ifstream History(ban_file);
+    if(History.is_open()){
+        while (getline(History,historyData)){
+            cout<<historyData<<endl;
+            _banUser[_banIndex] = historyData;
+            _banIndex++;
+        }
+        cout<<"__________________________________"<<endl;
+        History.close();
+    }else{
+        cout<<"No Data History:(\nCannot open file "<<endl;
+        exit(1);
+    }
+}
+void cycle::showBanUserlist() {
+    for (int i = 0; i < _banIndex; ++i) {
+        cout<<i<<"time --"<<_banUser[i]<<endl;
     }
 }

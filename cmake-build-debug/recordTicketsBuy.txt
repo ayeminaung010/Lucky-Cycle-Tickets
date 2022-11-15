@@ -7,3 +7,7 @@
 11 777 bought-by kokoaung
 11 888 bought-by kokoaung
 11 998 bought-by kokoaung
+3 889 bought-by koaye
+4 334 bought-by aungaung
+4 333 bought-by aungaung
+4 998 bought-by aungaung
