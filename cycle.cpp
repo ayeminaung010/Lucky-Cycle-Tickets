@@ -541,7 +541,7 @@ void cycle::manageUser() {
     }else if(m_option == "4"){
         showBanUserlist();
     }else if(m_option == "5"){
-
+        unban_user();
     }else if(m_option == "6"){
         adminView();
     }else if(m_option == "7"){
@@ -647,7 +647,7 @@ void cycle::toRecordBanUser() {
         }
         outfile.close();
     }else{
-        cout<<"Enable to record data !"<<endl;
+        cout<<"Enable to record data ! or no data for now"<<endl;
         cout<<"Error 444"<<endl;
         exit(444);
     }
@@ -722,7 +722,30 @@ void cycle::loadingBanUser() {
         exit(1);
     }
 }
+
+void cycle::unban_user() {
+    string b_name;
+    loadingBanUser();
+    cout<<"Enter username to remove from ban List "<<endl;
+    cin>>b_name;
+    int unbanStatus = toCheckBanUser(b_name);
+    if(unbanStatus != -1){
+        for (int i = unbanStatus; i < _banIndex; ++i) {
+            _banUser[i] = _banUser[i+1];
+        }
+        _banIndex--;
+        cout<<"Successfully removed..."<<endl;
+        toRecordBanUser();
+        manageUser();
+    }else{
+        cout<<"This user not found in Ban Lists "<<endl;
+        manageUser();
+    }
+
+}
+
 void cycle::showBanUserlist() {
+    loadingBanUser();
     for (int i = 0; i < _banIndex; ++i) {
         cout<<i+1 <<" :"<<_banUser[i]<<endl;
     }
@@ -911,7 +934,3 @@ void cycle::adminChangeUname() {
     }
 }
 
-void cycle::unban_user() {
-
-
-}
