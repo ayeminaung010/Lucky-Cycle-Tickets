@@ -7,17 +7,14 @@ using namespace std;
 #define CYCLEPJ_CYCLE_H
 
 namespace  N {
-
     class cycle {
     public:
-
         //variable declare
         int idIndex = 0;
         int userNameIndex = 0;
         int passwordIndex = 0;
         int amountIndex = 0;
         int current_index = 0;
-
 
         string arrId[100];
         string arrUsername[100];
@@ -35,9 +32,11 @@ namespace  N {
         string choose_numuber;
         string luckyM_option;
 
-        string luckyNumber[1000];
+        string luckyNumber[1000];//already buy numbers (sorry I was wrong naming :<)
         int luckyNumberIndex = 0;
 
+        string numberAvailable[1000]; //  numbers
+        int numberAvailableIndex = 0;
 
         //function declaration
         void welcome();
@@ -45,13 +44,17 @@ namespace  N {
         void login();
         void Register();
         void loadingNumber(); // loading lucky number
+        void numberSet();
+        void numberGet(); //loading
+        void rm_number(string num); // to remove not available numbers
+        void toRecordAvailableNo(); //record left numbers in another file
 
         int userExist(string uName); //check user exist or not
         void luckyMainProject();  //to buy lucky tickets
+        void userOption(); //user option
         void toRecordUserData(); //after program close ,store user data at file
         void luckyMOption(); // option for choose Lucky Number func
-        void userOption(); //user option
-        void toReadHistory(); //to show user buy data
+        void toReadHistory(); //to show user buy data //after name change will must lose history data :3
         void changeUserName(); // change username
         void changeUserPass(); //change user pass
         void fillUserAmount(); // fill money user
@@ -96,8 +99,5 @@ namespace  N {
         void adminChangePw(); //change pw for admin
         void adminChangeUname(); //change name for admin
     };
-
 }
 #endif //CYCLEPJ_CYCLE_H
-
-//(need to add unban system)

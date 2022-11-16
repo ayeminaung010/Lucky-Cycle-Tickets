@@ -11,8 +11,12 @@ using namespace  std;
 
 void cycle::welcome() {
     cout<<"Welcome from our cycle lucky project"<<endl;
-    userDataLoading();
-    loadingAdminData();
+    numberSet(); // need to set number first
+    loadingRecordTicket(); //loading for to know buy number or not
+    numberGet(); //get number from number set
+    userDataLoading(); // user registered data loading
+    toRecordAvailableNo(); // set available number
+    loadingAdminData(); //for admin
     mainManu();
 }
 
@@ -70,7 +74,13 @@ void cycle::loadingRecordTicket() {
                         count++;
                     }else if(count == 1){
                         luckyNumber[luckyNumberIndex] = data;
-                        cout<<"Already buy this number:"<<luckyNumber[luckyNumberIndex]<<endl;
+                        if(stoi(luckyNumber[luckyNumberIndex]) >= 10 && stoi(luckyNumber[luckyNumberIndex]) < 99){
+                            cout<<"Already buy this number:"<<"0"+luckyNumber[luckyNumberIndex]<<endl;
+                        }else if(stoi(luckyNumber[luckyNumberIndex]) < 10){
+                            cout<<"Already buy this number:"<<"00"+luckyNumber[luckyNumberIndex]<<endl;
+                        }else{
+                            cout<<"Already buy this number:"<<luckyNumber[luckyNumberIndex]<<endl;
+                        }
                         luckyNumberIndex++;
                         data = "";
                         count++;
@@ -78,7 +88,6 @@ void cycle::loadingRecordTicket() {
                         data = "";
                         count = 0;
                     }
-
                 }else{
                     string st(1,ch);
                     data = data + st;
@@ -100,14 +109,15 @@ void cycle::luckyMainProject() {
     cout<<"Choose 3 digits Number You Want :"<<endl;
     cin>>choose_numuber;
     int status = toCheckLuckyNumber(choose_numuber);
+    rm_number(choose_numuber);
     if(status == 1){
         cout<<"Already bought this number :"<<choose_numuber<<endl;
         cout<<"__________________________________"<<endl;
         luckyMainProject();
     }else{
-        int number = 0;
-        number = stoi(choose_numuber);
-        if(number >= 100 &&  number < 1000){
+        int number = stoi(choose_numuber);
+
+        if(number >= 0 &&  number < 1000){
             cout<<"Loading.....Please wait..!!"<<endl;
             cout<<"Checking your Balance..."<<endl;
             int balance = stoi(arrAmount[current_index]);
@@ -126,11 +136,25 @@ void cycle::luckyMainProject() {
                 ofstream userFile; // open user file
                 userFile.open(usernameFile,ios::app);
                 if(outfile.is_open()){
-                    string toRecord = to_string(current_index + 1)+" "+ to_string(number) +" bought-by "+arrUsername[current_index]+"\n";
-                    outfile<<toRecord; //for admin file
+                    if(number < 10 ){
+                        string toRecord = to_string(current_index + 1)+" "+"00"+ to_string(number) +" bought-by "+arrUsername[current_index]+"\n";
+                        outfile<<toRecord; //for admin file
 
-                    string userTxtRecord = to_string(number) + " bought by you:"+arrUsername[current_index]+" \n";
-                    userFile<<userTxtRecord; //user only file
+                        string userTxtRecord = "00"+to_string(number) + " bought by you:"+arrUsername[current_index]+" \n";
+                        userFile<<userTxtRecord; //user only file
+                    }else if(number >= 10 && number < 99){
+                        string toRecord = to_string(current_index + 1)+" "+"0"+to_string(number) +" bought-by "+arrUsername[current_index]+"\n";
+                        outfile<<toRecord; //for admin file
+
+                        string userTxtRecord = "0"+to_string(number) + " bought by you:"+arrUsername[current_index]+" \n";
+                        userFile<<userTxtRecord; //user only file
+                    }else{
+                        string toRecord = to_string(current_index + 1)+" "+ to_string(number) +" bought-by "+arrUsername[current_index]+"\n";
+                        outfile<<toRecord; //for admin file
+
+                        string userTxtRecord = to_string(number) + " bought by you:"+arrUsername[current_index]+" \n";
+                        userFile<<userTxtRecord; //user only file
+                    }
 
                     userFile.close();// close userfile
 
@@ -275,7 +299,90 @@ void cycle::login() {
         cout<<"********This account is Banned By admin*******\nContact Our Email Address ->> cyclepj@gmail.com"<<endl;
         mainManu();
     }
+}
 
+void cycle::numberSet() {
+    string  userDatafile = "number.txt";
+    //to write file
+    ofstream outfile;
+    outfile.open(userDatafile,ios::out);
+    if(outfile.is_open()){
+        for (int i = 0; i < 10 ; ++i) {
+            string toRecord ="00"+ to_string(i) + " ";
+            outfile<<toRecord;
+        }
+        for (int i = 10; i <= 99 ; ++i) {
+            string toRecord ="0"+ to_string(i) + " ";
+            outfile<<toRecord;
+        }
+        for (int j = 100; j < 1000; ++j) {
+            string toRecord = to_string(j)+ " ";
+            outfile<<toRecord;
+        }
+        outfile.close();
+    }else{
+        cout<<"Enable to record data !"<<endl;
+        cout<<"Error 444"<<endl;
+        exit(444);
+    }
+}
+void cycle::numberGet() {
+    cout<<"Number data are loading...."<<endl;
+    string  userDatafile = "number.txt";
+    string  data ; // temporary  to store
+    string dataLine; // to store data from one line
+    ifstream userfile(userDatafile);
+    if(userfile.is_open()){
+        while (getline(userfile,dataLine)){
+            for(auto &ch :dataLine){
+                if(ch == ' '){
+                    numberAvailable[numberAvailableIndex] = data;
+                    numberAvailableIndex++;
+                    data = "";
+                }else{
+                    string st(1,ch);
+                    data += st;
+                }
+            }
+        }//end while
+        userfile.close();
+    }else{
+        cout<<"cannot open file"<<endl;
+    }
+}
+
+void cycle::rm_number(string num) {
+    for (int i = 0; i < numberAvailableIndex; ++i) {
+        if(num == numberAvailable[i]){
+            numberAvailable[i] = numberAvailable[i+1];
+        }
+    }
+    numberAvailableIndex--;
+    toRecordAvailableNo();
+}
+void cycle::toRecordAvailableNo(){
+    string  avaiNumDatafile = "availableNumber.txt";
+
+    //to write file
+    ofstream outfile;
+    outfile.open(avaiNumDatafile,ios::out);
+    if(outfile.is_open()){
+        for (int j = 0; j < numberAvailableIndex ; ++j) {
+            int status = toCheckLuckyNumber(numberAvailable[j]);
+            if(status == -1){
+                string toRecord = numberAvailable[j]+" ";
+                outfile<<toRecord;
+            }else{
+                continue; //what if found go next
+            }
+
+        }
+        outfile.close();
+    }else{
+        cout<<"Enable to record data !"<<endl;
+        cout<<"Error 444"<<endl;
+        exit(444);
+    }
 }
 
 void cycle::loadingNumber(){
@@ -320,7 +427,6 @@ void cycle::userDataLoading() {
     ifstream userfile(userDatafile);
     if(userfile.is_open()){
         while (getline(userfile,dataLine)){
-//            dataLine = dataLine+" ";
             for(auto &ch :dataLine){
                 if(ch == ' '){
                     if(count == 0){
@@ -765,7 +871,6 @@ void cycle::newAdminAdd() {
         cin>>add_pass;
         _arr_admin_username[_admin_nameIndex] = add_name;
         _arr_admin_password[_admin_passIndex] = add_pass;
-
         _admin_nameIndex++;
         _admin_passIndex++;
     }
@@ -915,7 +1020,6 @@ void cycle::adminChangePw() {
             adminChangePw();
         }
     }
-
 }
 
 void cycle::adminChangeUname() {
@@ -933,4 +1037,3 @@ void cycle::adminChangeUname() {
         adminView();
     }
 }
-
