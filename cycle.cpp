@@ -12,7 +12,8 @@ using namespace  std;
 void cycle::welcome() {
     cout<<"Welcome from our cycle lucky project"<<endl;
     userDataLoading();
-    showUserData();
+    loadingAdminData();
+    toShowAdminList();
     mainManu();
 }
 
@@ -94,7 +95,7 @@ void cycle::loadingRecordTicket() {
 
 
 }
-int cycle::luckyMainProject() {
+void cycle::luckyMainProject() {
     cout<<"This is to choose for lucky number ..Good Luck!"<<endl;
     loadingNumber();
     cout<<"Choose 3 digits Number You Want :"<<endl;
@@ -191,7 +192,7 @@ void cycle::Register() {
     }else{
         cout<<"Enter your password for "<<r_username<<endl;
         cin>>r_password;
-        cout<<"Comfrim your password.."<<endl;
+        cout<<"Confrim your password.."<<endl;
         cin>>c_password;
         if(r_password == c_password){
             cout<<"Register Success!!"<<endl;
@@ -199,7 +200,6 @@ void cycle::Register() {
             cin>>r_amount;
             arrUsername[userNameIndex] = r_username;
             arrPassword[passwordIndex] = r_password;
-
             arrAmount[amountIndex] = r_amount;
             userNameIndex++;
             passwordIndex++;
@@ -242,18 +242,21 @@ void cycle::login() {
     cout<<"Enter your username to Login"<<endl;
     cin>>lusername;
     int adminStatus = toCheckAdmin(lusername);
-    int ban_status = toCheckBanUser(lusername);
 
     if(adminStatus != -1){
-            cout<<"Found!  You are Admin....Enter your password"<<endl;
+            cout<<"Found!  You are Admin....\nEnter your password"<<endl;
             cin>>admin_pass;
+            cout<<"admin id is :"<<adminStatus;
             if(_arr_admin_password[adminStatus] == admin_pass){
+                current_index = adminStatus; // to know current login user
+                cout<<"Current id :"<<current_index<<endl;
                 adminView();
             } else{
                 cout<<"Wrong Password!"<<endl;
                 mainManu();
             }
     }
+    int ban_status = toCheckBanUser(lusername);
     if(ban_status == -1){
         int status = userExist(lusername);
         if(status != -1){
@@ -262,20 +265,21 @@ void cycle::login() {
             if (lpassword == arrPassword[status]){
                 cout<<"Login success..."<<endl;
                 current_index = status; // to know current login user
+                cout<<"Current id :"<<current_index<<endl;
                 userOption();
-                // here something// go to buy lucky number
             }else{
                 cout<<"login failed! Wrong password!.."<<endl;
                 login();
             }
         }else{
             cout<<"Username not found!"<<endl;
-            mainManu();
+            login();
         }
     }else{
         cout<<"********This account is Banned By admin*******\nContact Our Email Address ->> cyclepj@gmail.com"<<endl;
-        login();
+        mainManu();
     }
+
 }
 
 void cycle::loadingNumber(){
@@ -301,8 +305,10 @@ int cycle::userExist(string uName) {
         if(arrUsername[j] == uName){
             return j; //found uName
         }
-        if(_arr_admin_username[j] == uName){
-            return j;
+    }
+    for (int i = 0; i < _admin_nameIndex ; ++i) {
+        if(_arr_admin_username[i] == uName){
+            return i;
         }
     }
     return -1; //not found
@@ -461,7 +467,9 @@ void  cycle::fillUserAmount() {
     string n_amount;
     cout<<"Enter your amount:"<<endl;
     cin>>n_amount;
-    arrAmount[current_index] = stoi(arrAmount[current_index])+ stoi(n_amount);
+
+    int new_amount = stoi(arrAmount[current_index])+ stoi(n_amount);
+    arrAmount[current_index] = to_string(new_amount);
     toRecordUserData();
     cout<<"SuccessFully Added your Balance.."<<endl;
     cout<<"__________________________________"<<endl;
@@ -478,7 +486,7 @@ int cycle::toCheckLuckyNumber(string number) {
 }
 
 int cycle::toCheckAdmin(string lname) {
-    for (int j = 0; j < _adminIndex ; j++) {
+    for (int j = 0; j < _admin_nameIndex ; j++) {
         if(_arr_admin_username[j] == lname){
             return j; //found uName
         }
@@ -489,7 +497,7 @@ int cycle::toCheckAdmin(string lname) {
 void cycle::adminView() {
     string admin_option;
     cout<<"Welcome from Admin Panel"<<endl;
-    cout<<"Press 1 to see User Data\nPress 2 to see Tickets buy History\nPress 3 to manage User\nPress 4 to see Already buy number Only..\nPress 5 to Log out\nPress 6 to Quit"<<endl;
+    cout<<"Press 1 to see User Data\nPress 2 to see Tickets buy History\nPress 3 to manage User\nPress 4 to see Already buy number Only..\nPress 5 to add new admin\nPress 6 to remove admin acc\nPress 7 to admin change password\nPress 8 to change  admin's username \nPress 9 to Log out\nPress 10 to Quit"<<endl;
     cin>>admin_option;
     if(admin_option == "1"){
         showUserData();
@@ -503,8 +511,16 @@ void cycle::adminView() {
         loadingRecordTicket();
         adminView();
     }else if(admin_option == "5"){
-        mainManu();
+        newAdminAdd();
     }else if(admin_option == "6"){
+        removeFromAdminList();
+    }else if(admin_option == "7"){
+
+    }else if(admin_option == "8"){
+
+    }else if(admin_option == "9"){
+        mainManu();
+    }else if(admin_option == "10"){
         cout<<"Bye Bye Admin..."<<endl;
         exit(1);
     }else{
@@ -536,7 +552,7 @@ void cycle::manageUser() {
     }
 }
 
-int cycle::remove_user() {
+void cycle::remove_user() {
     string rm_username;
     string rm_option;
 
@@ -549,7 +565,7 @@ int cycle::remove_user() {
             cin>>rm_option;
 
             if(rm_option == "1"){
-                    for (int i = 0; i < 100; ++i) {
+                    for (int i = status; i < 100; ++i) {
                         arrUsername[i] = arrUsername[i+1];
                         arrPassword[i] = arrPassword[i+1];
                         arrAmount[i] = arrAmount[i+1];
@@ -587,7 +603,7 @@ void cycle::optionForRemove(){
     }
 }
 
-int cycle::ban_user(){
+void cycle::ban_user(){
     string  b_username;
     string b_option;
     cout<<"Enter username to Ban from our program ..."<<endl;
@@ -651,7 +667,7 @@ void cycle::optionForBan(){
 }
 
 
-int cycle::_change_userPass(){
+void cycle::_change_userPass(){
     string ch_username;
     string n_pass;
     cout<<"Enter username to change password"<<endl;
@@ -679,6 +695,7 @@ int cycle::_change_userPass(){
 }
 
 int cycle::toCheckBanUser(string ban_user) {
+    loadingBanUser();
     for (int i = 0; i < _banIndex ; ++i) {
         if(_banUser[i] == ban_user){
             return i; //found
@@ -694,11 +711,10 @@ void cycle::loadingBanUser() {
     ifstream History(ban_file);
     if(History.is_open()){
         while (getline(History,historyData)){
-            cout<<historyData<<endl;
             _banUser[_banIndex] = historyData;
             _banIndex++;
         }
-        cout<<"__________________________________"<<endl;
+        cout<<"Loading_________________________"<<endl;
         History.close();
     }else{
         cout<<"No Data History:(\nCannot open file "<<endl;
@@ -707,6 +723,137 @@ void cycle::loadingBanUser() {
 }
 void cycle::showBanUserlist() {
     for (int i = 0; i < _banIndex; ++i) {
-        cout<<i<<"time --"<<_banUser[i]<<endl;
+        cout<<i+1 <<" :"<<_banUser[i]<<endl;
     }
+    manageUser();
+}
+
+void cycle::newAdminAdd() {
+    string  add_name;
+    string add_pass;
+    string numberAdd;
+    cout<<"How many admin want to add"<<endl;
+    cin>>numberAdd;
+    for (int i = 1 ; i < stoi(numberAdd)+1 ; ++i) {
+        cout<<"Enter username to add admin"<<endl;
+        cin>>add_name;
+        cout<<"Enter password for :"<<add_name<<endl;
+        cin>>add_pass;
+        _arr_admin_username[_admin_nameIndex] = add_name;
+        _arr_admin_password[_admin_passIndex] = add_pass;
+
+        _admin_nameIndex++;
+        _admin_passIndex++;
+    }
+    toRecordAdminData();
+    cout<<"Added SuccessFully "<<endl;
+    toShowAdminList();
+    cout<<"__________________________________"<<endl;
+    adminView();
+}
+
+void cycle::toRecordAdminData(){
+    string  userDatafile = "admin.txt";
+
+    //to write file
+    ofstream outfile;
+    outfile.open(userDatafile,ios::out);
+    if(outfile.is_open()){
+        for (int j = 1; j < _admin_nameIndex ; ++j) {
+            idIndex = j;
+            string toRecord = to_string(idIndex)+" "+_arr_admin_username[j]+" "+_arr_admin_password[j]+" \n";
+            outfile<<toRecord;
+        }
+        outfile.close();
+    }else{
+        cout<<"Enable to record data !"<<endl;
+        cout<<"Error 444"<<endl;
+        exit(444);
+    }
+}
+
+void cycle::loadingAdminData() {
+    cout<<"admin data are loading...."<<endl;
+    int count = 0;
+
+    string  adminDatafile = "admin.txt";
+    string  data ; // temporary  to store
+    string dataLine; // to store data from one line
+    ifstream userfile(adminDatafile);
+    if(userfile.is_open()){
+        while (getline(userfile,dataLine)){
+            for(auto &ch :dataLine){
+                if(ch == ' '){
+                    if(count == 0){
+                        _arr_admin_id[_admin_idIndex] = data;
+                        _admin_idIndex++;
+                        data = "";
+                        count++;
+                    }else if(count == 1){
+                        _arr_admin_username[_admin_nameIndex] = data;
+                        _admin_nameIndex++;
+                        count++;
+                        data = "";
+                    }else if(count == 2){
+                        _arr_admin_password[_admin_passIndex] = data;
+                        _admin_passIndex++;
+                        data = "";
+                        count = 0;
+                    }
+                }else{
+                    string st(1,ch);
+                    data +=  st;
+                }
+            }
+        }//end while
+
+        userfile.close();
+    }else{
+        cout<<"cannot open file"<<endl;
+    }
+}
+
+void cycle::toShowAdminList() {
+    for (int i = 0; i < _admin_idIndex ; ++i) {
+        cout<<"admin id -"<<_arr_admin_id[i]<<endl;
+        cout<<"admin name -"<<_arr_admin_username[i]<<endl;
+        cout<<"admin pass -"<<_arr_admin_password[i]<<endl;
+    }
+}
+
+void cycle::removeFromAdminList() {
+    string rm_username;
+    string rm_option;
+
+    cout<<"Enter admin username to remove"<<endl;
+    cin>>rm_username;
+    int status = toCheckAdmin(rm_username);
+    if(status != -1){
+        cout<<"Found username...!! Are you sure to remove this admin :"<<_arr_admin_username[status]<<endl;
+        cout<<"Press 1 to say YES\nPress 2 to say NO"<<endl;
+        cin>>rm_option;
+
+        if(rm_option == "1"){
+            for (int i = status; i < _admin_idIndex; ++i) {
+                _arr_admin_username[i] = _arr_admin_username[i+1];
+                _arr_admin_password[i] = _arr_admin_password[i+1];
+                _arr_admin_id[i] = _arr_admin_id[i+1];
+            }
+            _admin_nameIndex--;
+            _admin_passIndex--;
+            _admin_idIndex--;
+            cout<<"Successfully removed..."<<endl;
+            toRecordAdminData();
+            optionForRemove();
+        }else if(rm_option == "2"){
+            optionForRemove();
+        }else{
+            cout<<"Invalid Input"<<endl;
+            removeFromAdminList();
+        }
+    }else{
+        cout<<"Admin name Not Found"<<endl;
+        removeFromAdminList();
+    }
+
 }

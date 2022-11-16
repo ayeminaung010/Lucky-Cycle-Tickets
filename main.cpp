@@ -9,5 +9,4 @@ int main() {
 
     return 0;
 }
-
-//amount problem
+//add new admin failed mission
