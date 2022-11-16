@@ -13,7 +13,6 @@ void cycle::welcome() {
     cout<<"Welcome from our cycle lucky project"<<endl;
     userDataLoading();
     loadingAdminData();
-    toShowAdminList();
     mainManu();
 }
 
@@ -246,10 +245,8 @@ void cycle::login() {
     if(adminStatus != -1){
             cout<<"Found!  You are Admin....\nEnter your password"<<endl;
             cin>>admin_pass;
-            cout<<"admin id is :"<<adminStatus;
             if(_arr_admin_password[adminStatus] == admin_pass){
                 current_index = adminStatus; // to know current login user
-                cout<<"Current id :"<<current_index<<endl;
                 adminView();
             } else{
                 cout<<"Wrong Password!"<<endl;
@@ -265,7 +262,6 @@ void cycle::login() {
             if (lpassword == arrPassword[status]){
                 cout<<"Login success..."<<endl;
                 current_index = status; // to know current login user
-                cout<<"Current id :"<<current_index<<endl;
                 userOption();
             }else{
                 cout<<"login failed! Wrong password!.."<<endl;
@@ -497,7 +493,7 @@ int cycle::toCheckAdmin(string lname) {
 void cycle::adminView() {
     string admin_option;
     cout<<"Welcome from Admin Panel"<<endl;
-    cout<<"Press 1 to see User Data\nPress 2 to see Tickets buy History\nPress 3 to manage User\nPress 4 to see Already buy number Only..\nPress 5 to add new admin\nPress 6 to remove admin acc\nPress 7 to admin change password\nPress 8 to change  admin's username \nPress 9 to Log out\nPress 10 to Quit"<<endl;
+    cout<<"Press 1 to see User Data\nPress 2 to see Tickets buy History\nPress 3 to manage User\nPress 4 to see Already buy number Only..\nPress 5 to add new admin\nPress 6 to remove admin acc\nPress 7 to admin change password\nPress 8 to change  admin's username \nPress 9 to see admin Lists\nPress 10 to Log out\nPress 11 to Quit"<<endl;
     cin>>admin_option;
     if(admin_option == "1"){
         showUserData();
@@ -515,12 +511,15 @@ void cycle::adminView() {
     }else if(admin_option == "6"){
         removeFromAdminList();
     }else if(admin_option == "7"){
-
+        adminChangePw();
     }else if(admin_option == "8"){
-
+        adminChangeUname();
     }else if(admin_option == "9"){
-        mainManu();
+        toShowAdminList();
+        adminView();
     }else if(admin_option == "10"){
+        mainManu();
+    }else if(admin_option == "11"){
         cout<<"Bye Bye Admin..."<<endl;
         exit(1);
     }else{
@@ -531,7 +530,7 @@ void cycle::adminView() {
 
 void cycle::manageUser() {
     string  m_option;
-    cout<<"Press 1 to remove user account\nPress 2 to Ban User \nPress 3 to change User password\nPress 4 to see Banned user lists\nPress 5 to go back\nPress 6 to Quit"<<endl;
+    cout<<"Press 1 to remove user account\nPress 2 to Ban User \nPress 3 to change User password\nPress 4 to see Banned user lists\nPress 5 to Unban user\nPress 6 to go back\nPress 7 to Quit"<<endl;
     cin>>m_option;
     if(m_option == "1"){
         remove_user();
@@ -542,8 +541,10 @@ void cycle::manageUser() {
     }else if(m_option == "4"){
         showBanUserlist();
     }else if(m_option == "5"){
-        adminView();
+
     }else if(m_option == "6"){
+        adminView();
+    }else if(m_option == "7"){
         cout<<"Bye Bye Admin..."<<endl;
         exit(1);
     }else{
@@ -662,7 +663,7 @@ void cycle::optionForBan(){
         ban_user();
     }else{
         cout<<"Invalid Input"<<endl;
-        optionForRemove();
+        optionForBan();
     }
 }
 
@@ -773,7 +774,6 @@ void cycle::toRecordAdminData(){
 }
 
 void cycle::loadingAdminData() {
-    cout<<"admin data are loading...."<<endl;
     int count = 0;
 
     string  adminDatafile = "admin.txt";
@@ -844,9 +844,9 @@ void cycle::removeFromAdminList() {
             _admin_idIndex--;
             cout<<"Successfully removed..."<<endl;
             toRecordAdminData();
-            optionForRemove();
+            optionForadminRemove();
         }else if(rm_option == "2"){
-            optionForRemove();
+            optionForadminRemove();
         }else{
             cout<<"Invalid Input"<<endl;
             removeFromAdminList();
@@ -855,5 +855,63 @@ void cycle::removeFromAdminList() {
         cout<<"Admin name Not Found"<<endl;
         removeFromAdminList();
     }
+}
+void cycle::optionForadminRemove() {
+    string rm_option2;
+    cout<<"Press 1 to go back\nPress 2 to remove  username again"<<endl;
+    cin>>rm_option2;
+    if(rm_option2 == "1"){
+        adminView();
+    }else if(rm_option2 =="2"){
+        removeFromAdminList();
+    }else{
+        cout<<"Invalid Input"<<endl;
+        optionForadminRemove();
+    }
+}
+
+void cycle::adminChangePw() {
+    string  ch_password;
+    string n_password;
+    string cp_option;
+    cout<<"Enter your current Password "<<endl;
+    cin>>ch_password;
+    if(ch_password == _arr_admin_password[current_index]){
+        cout<<"Enter new Password for :"<<_arr_admin_username[current_index]<<endl;
+        cin>>n_password;
+        _arr_admin_password[current_index] = n_password;
+        toRecordAdminData();
+        adminView();
+    }else{
+        cout<<"Wrong Password!!"<<endl;
+        cout<<"Press 1 to go Option\nPress any number to Change Password again"<<endl;
+        cin>>cp_option;
+        if(cp_option == "1"){
+            adminView();
+        }else{
+            adminChangePw();
+        }
+    }
+
+}
+
+void cycle::adminChangeUname() {
+    string n_username;
+    cout<<"Enter new Username for :"<<_arr_admin_username[current_index]<<endl;
+    cin>>n_username;
+    int status = toCheckAdmin(n_username);
+    if(status != -1){
+        cout<<"Username Already Exists In Admin Team.. Try Again!!  "<<endl;
+        adminChangeUname();
+    }else{
+        _arr_admin_username[current_index] = n_username; //changes
+        cout<<"Your new username is -"<<_arr_admin_username[current_index]<<endl;
+        toRecordAdminData();
+        adminView();
+    }
+}
+
+void cycle::unban_user() {
+
 
 }
