@@ -51,10 +51,11 @@ namespace  N {
 
         int userExist(string uName); //check user exist or not
         void luckyMainProject();  //to buy lucky tickets
-        void userOption(); //user option
+        void userOption(); //user option //user first view
+        void login_option();
         void toRecordUserData(); //after program close ,store user data at file
         void luckyMOption(); // option for choose Lucky Number func
-        void toReadHistory(); //to show user buy data //after name change will must lose history data :3
+        void toReadHistory(); //to show user buy data history
         void changeUserName(); // change username
         void changeUserPass(); //change user pass
         void fillUserAmount(); // fill money user
@@ -98,6 +99,9 @@ namespace  N {
         void toShowAdminList(); //admin list
         void adminChangePw(); //change pw for admin
         void adminChangeUname(); //change name for admin
+
+        void user_name_history();// to show users name change history
+
     };
 }
 #endif //CYCLEPJ_CYCLE_H

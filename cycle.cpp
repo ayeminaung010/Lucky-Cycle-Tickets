@@ -128,7 +128,7 @@ void cycle::luckyMainProject() {
                 toRecordUserData();
 
                 string  recordFile = "recordTicketsBuy.txt"; //for admin file
-                string  usernameFile = arrUsername[current_index]+".txt"; //user only file
+                string  usernameFile = "userNo_"+arrId[current_index]+".txt"; //user only file
                 //to write file
                 ofstream outfile; // open all record bought data file
                 outfile.open(recordFile,ios::app);
@@ -142,7 +142,7 @@ void cycle::luckyMainProject() {
 
                         string userTxtRecord = "00"+to_string(number) + " bought by you:"+arrUsername[current_index]+" \n";
                         userFile<<userTxtRecord; //user only file
-                    }else if(number >= 10 && number < 99){
+                    }else if(number >= 10 && number <= 99){
                         string toRecord = to_string(current_index + 1)+" "+"0"+to_string(number) +" bought-by "+arrUsername[current_index]+"\n";
                         outfile<<toRecord; //for admin file
 
@@ -182,11 +182,13 @@ void cycle::luckyMainProject() {
 }
 
 void cycle::luckyMOption(){
-    cout<<"Press 1 to Buy Tickets Again\nPress 2 to Quit \nPress any number to Log out "<<endl;
+    cout<<"Press 1 to Buy Tickets Again\nPress 2 to Go Back \nPress 3 to Quit \nPress any number to Log out "<<endl;
     cin>>luckyM_option;
     if(luckyM_option == "1"){
         luckyMainProject();
     }else if(luckyM_option == "2"){
+        userOption();
+    }else if(luckyM_option == "3"){
         cout<<"BYE BYE..."<<endl;
         exit(1);
     }else{
@@ -215,7 +217,7 @@ void cycle::Register() {
     }else{
         cout<<"Enter your password for "<<r_username<<endl;
         cin>>r_password;
-        cout<<"Confrim your password.."<<endl;
+        cout<<"Confirm your password.."<<endl;
         cin>>c_password;
         if(r_password == c_password){
             cout<<"Register Success!!"<<endl;
@@ -289,15 +291,31 @@ void cycle::login() {
                 userOption();
             }else{
                 cout<<"login failed! Wrong password!.."<<endl;
-                login();
+                login_option();
             }
         }else{
             cout<<"Username not found!"<<endl;
-            login();
+            login_option();
         }
     }else{
         cout<<"********This account is Banned By admin*******\nContact Our Email Address ->> cyclepj@gmail.com"<<endl;
         mainManu();
+    }
+}
+void cycle::login_option() {
+    string op_login;
+    cout<<"Press 1 to go Login..\nPress 2 to register?\nPress 3 to Quit "<<endl;
+    cin>>op_login;
+    if(op_login == "1"){
+        login();
+    }else if(op_login == "2"){
+        Register();
+    }else if(op_login == "3"){
+        cout<<"BYE BYE >_<"<<endl;
+        exit(1);
+    }else{
+        cout<<"Invalid input "<<endl;
+        login_option();
     }
 }
 
@@ -375,8 +393,8 @@ void cycle::toRecordAvailableNo(){
             }else{
                 continue; //what if found go next
             }
-
         }
+        numberAvailableIndex--;
         outfile.close();
     }else{
         cout<<"Enable to record data !"<<endl;
@@ -509,7 +527,7 @@ void cycle::showBalance() {
 }
 
 void cycle::toReadHistory() {
-    string filename = arrUsername[current_index] + ".txt";
+    string  filename = "userNo_"+arrId[current_index]+".txt"; //user only file
     string historyData;
     ifstream History(filename);
     if(History.is_open()){
@@ -534,6 +552,21 @@ void cycle::changeUserName() {
         cout<<"Username Already Exists.. Try Again!!  "<<endl;
         changeUserName();
     }else{
+        string  userDatafile = "NameChangeHistory.txt"; //for admin
+        //to write user file
+        ofstream outfile;
+        outfile.open(userDatafile,ios::app); //for admin
+        //tp write data admin
+        if(outfile.is_open()){
+                string toRecord = "ID is "+ arrId[current_index]+":: "+arrUsername[current_index]+" : was changed name to ==>"+n_username+" \n"; // for admin
+                outfile<<toRecord;
+            outfile.close();
+        }else{
+            cout<<"Enable to record data !"<<endl;
+            cout<<"Error 444"<<endl;
+            exit(444);
+        }
+        //changes start
         arrUsername[current_index] = n_username; //changes
         cout<<"Your new username is -"<<arrUsername[current_index]<<endl;
         toRecordUserData();
@@ -636,7 +669,7 @@ void cycle::adminView() {
 
 void cycle::manageUser() {
     string  m_option;
-    cout<<"Press 1 to remove user account\nPress 2 to Ban User \nPress 3 to change User password\nPress 4 to see Banned user lists\nPress 5 to Unban user\nPress 6 to go back\nPress 7 to Quit"<<endl;
+    cout<<"Press 1 to remove user account\nPress 2 to Ban User \nPress 3 to change User password\nPress 4 to see Banned user lists\nPress 5 to Unban user\nPress 6 to See User's name change History \nPress 7 to go back\nPress 8 to Quit"<<endl;
     cin>>m_option;
     if(m_option == "1"){
         remove_user();
@@ -649,12 +682,34 @@ void cycle::manageUser() {
     }else if(m_option == "5"){
         unban_user();
     }else if(m_option == "6"){
-        adminView();
+        user_name_history();
     }else if(m_option == "7"){
+        adminView();
+    }else if(m_option == "8"){
         cout<<"Bye Bye Admin..."<<endl;
         exit(1);
     }else{
         cout<<"Invalid input!!"<<endl;
+        manageUser();
+    }
+}
+
+void cycle::user_name_history(){
+    cout<<"loading recorded data is running......."<<endl;
+
+    string  userDatafile = "NameChangeHistory.txt";
+    string recordData;
+
+    ifstream datafile(userDatafile);
+    if(datafile.is_open()){
+        while (getline(datafile,recordData)){
+            cout<<recordData<<endl;
+        }
+        datafile.close();
+        cout<<"____________________________"<<endl;
+        manageUser();
+    }else{
+        cout<<"Don't have record!\nCannot open file"<<endl;
         manageUser();
     }
 }
