@@ -52,10 +52,10 @@ RM = "C:\Program Files\JetBrains\CLion 2021.2.1\bin\cmake\win\bin\cmake.exe" -E 
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = D:\cyclePj
+CMAKE_SOURCE_DIR = "D:\clone git\Lucky-Cycle-Tickets"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = D:\cyclePj\cmake-build-debug
+CMAKE_BINARY_DIR = "D:\clone git\Lucky-Cycle-Tickets\cmake-build-debug"
 
 # Include any dependencies generated for this target.
 include CMakeFiles/cyclePj.dir/depend.make
@@ -67,29 +67,29 @@ include CMakeFiles/cyclePj.dir/flags.make
 
 CMakeFiles/cyclePj.dir/main.cpp.obj: CMakeFiles/cyclePj.dir/flags.make
 CMakeFiles/cyclePj.dir/main.cpp.obj: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:\cyclePj\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/cyclePj.dir/main.cpp.obj"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\cyclePj.dir\main.cpp.obj -c D:\cyclePj\main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="D:\clone git\Lucky-Cycle-Tickets\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/cyclePj.dir/main.cpp.obj"
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\cyclePj.dir\main.cpp.obj -c "D:\clone git\Lucky-Cycle-Tickets\main.cpp"
 
 CMakeFiles/cyclePj.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cyclePj.dir/main.cpp.i"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\cyclePj\main.cpp > CMakeFiles\cyclePj.dir\main.cpp.i
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "D:\clone git\Lucky-Cycle-Tickets\main.cpp" > CMakeFiles\cyclePj.dir\main.cpp.i
 
 CMakeFiles/cyclePj.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cyclePj.dir/main.cpp.s"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\cyclePj\main.cpp -o CMakeFiles\cyclePj.dir\main.cpp.s
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "D:\clone git\Lucky-Cycle-Tickets\main.cpp" -o CMakeFiles\cyclePj.dir\main.cpp.s
 
 CMakeFiles/cyclePj.dir/cycle.cpp.obj: CMakeFiles/cyclePj.dir/flags.make
 CMakeFiles/cyclePj.dir/cycle.cpp.obj: ../cycle.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:\cyclePj\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/cyclePj.dir/cycle.cpp.obj"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\cyclePj.dir\cycle.cpp.obj -c D:\cyclePj\cycle.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="D:\clone git\Lucky-Cycle-Tickets\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/cyclePj.dir/cycle.cpp.obj"
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\cyclePj.dir\cycle.cpp.obj -c "D:\clone git\Lucky-Cycle-Tickets\cycle.cpp"
 
 CMakeFiles/cyclePj.dir/cycle.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cyclePj.dir/cycle.cpp.i"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\cyclePj\cycle.cpp > CMakeFiles\cyclePj.dir\cycle.cpp.i
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "D:\clone git\Lucky-Cycle-Tickets\cycle.cpp" > CMakeFiles\cyclePj.dir\cycle.cpp.i
 
 CMakeFiles/cyclePj.dir/cycle.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cyclePj.dir/cycle.cpp.s"
-	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\cyclePj\cycle.cpp -o CMakeFiles\cyclePj.dir\cycle.cpp.s
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "D:\clone git\Lucky-Cycle-Tickets\cycle.cpp" -o CMakeFiles\cyclePj.dir\cycle.cpp.s
 
 # Object files for target cyclePj
 cyclePj_OBJECTS = \
@@ -105,7 +105,7 @@ cyclePj.exe: CMakeFiles/cyclePj.dir/build.make
 cyclePj.exe: CMakeFiles/cyclePj.dir/linklibs.rsp
 cyclePj.exe: CMakeFiles/cyclePj.dir/objects1.rsp
 cyclePj.exe: CMakeFiles/cyclePj.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=D:\cyclePj\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable cyclePj.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="D:\clone git\Lucky-Cycle-Tickets\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable cyclePj.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\cyclePj.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -117,6 +117,6 @@ CMakeFiles/cyclePj.dir/clean:
 .PHONY : CMakeFiles/cyclePj.dir/clean
 
 CMakeFiles/cyclePj.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" D:\cyclePj D:\cyclePj D:\cyclePj\cmake-build-debug D:\cyclePj\cmake-build-debug D:\cyclePj\cmake-build-debug\CMakeFiles\cyclePj.dir\DependInfo.cmake --color=$(COLOR)
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" "D:\clone git\Lucky-Cycle-Tickets" "D:\clone git\Lucky-Cycle-Tickets" "D:\clone git\Lucky-Cycle-Tickets\cmake-build-debug" "D:\clone git\Lucky-Cycle-Tickets\cmake-build-debug" "D:\clone git\Lucky-Cycle-Tickets\cmake-build-debug\CMakeFiles\cyclePj.dir\DependInfo.cmake" --color=$(COLOR)
 .PHONY : CMakeFiles/cyclePj.dir/depend
 

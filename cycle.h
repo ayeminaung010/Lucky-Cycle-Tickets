@@ -84,13 +84,15 @@ namespace  N {
         void remove_user(); //remove user or delete use acc
         void ban_user(); //ban user for admin
         void unban_user(); //unban user /remove from ban list
-        void _change_userPass(); //change user pass for admin /what if user contact to admin,user not remember pass
-        void optionForRemove();
         void  optionForBan();
         void toRecordBanUser(); // record ban user
         int toCheckBanUser(string ban_user); //check ban use or not
         void loadingBanUser(); //loading from file/ ban users
         void showBanUserlist();//to show ban user for admin
+
+        void _change_userPass(); //change user pass for admin /what if user contact to admin,user not remember pass
+        void optionForRemove();
+
         void newAdminAdd(); // admin can add new admins
         void toRecordAdminData(); //record admin data
         void loadingAdminData(); //load admin data

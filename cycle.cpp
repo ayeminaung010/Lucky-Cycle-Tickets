@@ -74,13 +74,8 @@ void cycle::loadingRecordTicket() {
                         count++;
                     }else if(count == 1){
                         luckyNumber[luckyNumberIndex] = data;
-                        if(stoi(luckyNumber[luckyNumberIndex]) >= 10 && stoi(luckyNumber[luckyNumberIndex]) < 99){
-                            cout<<"Already buy this number:"<<"0"+luckyNumber[luckyNumberIndex]<<endl;
-                        }else if(stoi(luckyNumber[luckyNumberIndex]) < 10){
-                            cout<<"Already buy this number:"<<"00"+luckyNumber[luckyNumberIndex]<<endl;
-                        }else{
                             cout<<"Already buy this number:"<<luckyNumber[luckyNumberIndex]<<endl;
-                        }
+
                         luckyNumberIndex++;
                         data = "";
                         count++;
@@ -90,7 +85,7 @@ void cycle::loadingRecordTicket() {
                     }
                 }else{
                     string st(1,ch);
-                    data = data + st;
+                    data +=  st;
                 }
 
             }
@@ -100,8 +95,6 @@ void cycle::loadingRecordTicket() {
     }else{
         cout<<"cannot open file"<<endl;
     }
-
-
 }
 void cycle::luckyMainProject() {
     cout<<"This is to choose for lucky number ..Good Luck!"<<endl;
@@ -109,7 +102,7 @@ void cycle::luckyMainProject() {
     cout<<"Choose 3 digits Number You Want :"<<endl;
     cin>>choose_numuber;
     int status = toCheckLuckyNumber(choose_numuber);
-    rm_number(choose_numuber);
+    rm_number(choose_numuber); // to remove bought number in availableNumber.txt
     if(status == 1){
         cout<<"Already bought this number :"<<choose_numuber<<endl;
         cout<<"__________________________________"<<endl;
@@ -155,6 +148,8 @@ void cycle::luckyMainProject() {
                         string userTxtRecord = to_string(number) + " bought by you:"+arrUsername[current_index]+" \n";
                         userFile<<userTxtRecord; //user only file
                     }
+                    luckyNumber[luckyNumberIndex] = choose_numuber;
+                    luckyNumberIndex++;
 
                     userFile.close();// close userfile
 
@@ -177,8 +172,6 @@ void cycle::luckyMainProject() {
             luckyMOption();
         }
     }//end checking
-
-
 }
 
 void cycle::luckyMOption(){
@@ -237,7 +230,6 @@ void cycle::Register() {
             Register();
         }
     }
-
 }
 
 void cycle::toRecordUserData(){
@@ -613,12 +605,13 @@ void  cycle::fillUserAmount() {
 
 int cycle::toCheckLuckyNumber(string number) {
     for (int j = 0; j < luckyNumberIndex ; j++) {
-        if(luckyNumber[j] == number){
+        if(stoi(luckyNumber[j]) == stoi(number)){
             return 1; //found number
         }
     }
     return -1; //not found
 }
+
 
 int cycle::toCheckAdmin(string lname) {
     for (int j = 0; j < _admin_nameIndex ; j++) {
@@ -744,11 +737,11 @@ void cycle::remove_user() {
                 optionForRemove();
             }else{
                 cout<<"Invalid Input"<<endl;
-                remove_user();
+                optionForRemove();
             }
     }else{
         cout<<"Username Not Found"<<endl;
-        remove_user(); //something
+        optionForRemove(); //something
     }
 }
 void cycle::optionForRemove(){
@@ -770,29 +763,35 @@ void cycle::ban_user(){
     string b_option;
     cout<<"Enter username to Ban from our program ..."<<endl;
     cin>>b_username;
-    int status = userExist(b_username);
+    int ban_status = toCheckBanUser(b_username);
+    if(ban_status == -1 ){
+        int status = userExist(b_username);
+        if(status != -1){
+            cout<<"Found username...!! Are you sure to ban this user :"<<arrUsername[status]<<endl;
+            cout<<"Press 1 to say YES\nPress 2 to say NO"<<endl;
+            cin>>b_option;
 
-    if(status != 1){
-        cout<<"Found username...!! Are you sure to ban this user :"<<arrUsername[status]<<endl;
-        cout<<"Press 1 to say YES\nPress 2 to say NO"<<endl;
-        cin>>b_option;
-
-        if(b_option == "1"){
-            _banUser[_banIndex] = b_username;
-            _banIndex++;
-            toRecordBanUser();
-            cout<<"Successfully Banned.. !"<<endl;
+            if(b_option == "1"){
+                _banUser[_banIndex] = b_username;
+                _banIndex++;
+                toRecordBanUser();
+                cout<<"Successfully Banned.. !"<<endl;
+                optionForBan();
+            }else if(b_option == "2"){
+                optionForBan();
+            }else{
+                cout<<"Invalid Input"<<endl;
+                ban_user();
+            }
+        } else{
+            cout<<"User not found "<<endl;
             optionForBan();
-        }else if(b_option == "2"){
-            optionForBan();
-        }else{
-            cout<<"Invalid Input"<<endl;
-            ban_user();
         }
-    } else{
-        cout<<"User not found "<<endl;
-        ban_user();
+    }else{
+        cout<<"********This User is already Banned By Admin*****"<<endl;
+        optionForBan();
     }
+
 }
 
 void cycle::toRecordBanUser() {
@@ -868,7 +867,7 @@ int cycle::toCheckBanUser(string ban_user) {
 
 void cycle::loadingBanUser() {
     string  ban_file = "BanUser.txt";
-
+    _banIndex = 0;
     string historyData;
     ifstream History(ban_file);
     if(History.is_open()){
@@ -891,8 +890,8 @@ void cycle::unban_user() {
     cin>>b_name;
     int unbanStatus = toCheckBanUser(b_name);
     if(unbanStatus != -1){
-        for (int i = unbanStatus; i < _banIndex; ++i) {
-            _banUser[i] = _banUser[i+1];
+        for (int i = 0; i < _banIndex; ++i) {
+            _banUser[unbanStatus] = _banUser[unbanStatus+1];
         }
         _banIndex--;
         cout<<"Successfully removed..."<<endl;
@@ -902,7 +901,6 @@ void cycle::unban_user() {
         cout<<"This user not found in Ban Lists "<<endl;
         manageUser();
     }
-
 }
 
 void cycle::showBanUserlist() {

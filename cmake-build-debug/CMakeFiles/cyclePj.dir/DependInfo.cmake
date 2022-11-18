@@ -8,8 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "D:/cyclePj/cycle.cpp" "D:/cyclePj/cmake-build-debug/CMakeFiles/cyclePj.dir/cycle.cpp.obj"
-  "D:/cyclePj/main.cpp" "D:/cyclePj/cmake-build-debug/CMakeFiles/cyclePj.dir/main.cpp.obj"
+  "D:/clone git/Lucky-Cycle-Tickets/cycle.cpp" "D:/clone git/Lucky-Cycle-Tickets/cmake-build-debug/CMakeFiles/cyclePj.dir/cycle.cpp.obj"
+  "D:/clone git/Lucky-Cycle-Tickets/main.cpp" "D:/clone git/Lucky-Cycle-Tickets/cmake-build-debug/CMakeFiles/cyclePj.dir/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
